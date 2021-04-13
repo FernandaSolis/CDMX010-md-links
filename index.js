@@ -7,20 +7,18 @@ const options = {};
 
 if (argv[1] === '--stats' || argv[2] === '--stats' || argv[1] === '--s' || argv[2] === '--s') {
   options.stats = '--stats';
-}
-if (argv[1] === '--validate' || argv[2] === '--validate' || argv[1] === '--v' || argv[2] === '--v') {
+} else if (argv[1] === '--validate' || argv[2] === '--validate' || argv[1] === '--v' || argv[2] === '--v') {
   options.validate = '--validate';
-}
-// if (argv[2] === '--validate' && argv[3] === '--stats' || argv[2] === '--stats' && argv[3] === '--validate'|| argv[2] === '--stats' && argv[3] === '--validate') {
-if (argv[2] === '--validate --stats' || argv[2] === '--stats --validate') {
+} else if (argv[2] === '--validate --stats' || argv[2] === '--stats --validate') {
   options.validate = '--validate';
   options.stats = '--stats';
+} else {
+  console.log(chalk.red.bgYellowBright('Prueba con comandos válidos')) // ¿que solo salga si no se cumplen los if?
 }
 
 if (options.stats === '--stats') {
   mainStats(path);
 }
-
 if (options.validate === '--validate') {
   mainValidate(path);
 }
