@@ -3,18 +3,17 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const chalk = require('chalk');
 
-
 // convertir a ruta
-// const gettingAbsolutePath = (routes) => {
-//     if (path.isAbsolute(routes) === false) {  // si es realtiva
-//         const absoluteRoute = path.resolve(routes); // que lo convierta a absoluta
-//         return absoluteRoute;
-//     }
-//     else if (path.isAbsolute(routes) === true) { //si es absoluta
-//       return routes
-//     }
-//   }
-//   console.log('Tu ruta absoluta es : ' + gettingAbsolutePath('README.md'));
+const gettingAbsolutePath = (routes) => {
+  if (path.isAbsolute(routes) === false) { // si es realtiva
+    const absoluteRoute = path.resolve(routes);
+    return absoluteRoute;
+  }
+  if (path.isAbsolute(routes) === true) { // si es absoluta
+    return routes;
+  }
+};
+// console.log('Tu ruta absoluta es : ' + gettingAbsolutePath('README.md'));
 
 // es un directorio?
 const validateDirectory = (route) => {
@@ -22,7 +21,7 @@ const validateDirectory = (route) => {
   // console.log(directory);
   return directory;
 };
-// validateDirectory('coverage')
+// validateDirectory('./')
 
 // recorro directorio
 const throughDirectory = (route) => {
@@ -41,7 +40,7 @@ const throughDirectory = (route) => {
   // console.log(arrayDirectoryLinks);
   return arrayDirectoryLinks;
 };
-// throughDirectory('coverage')
+// throughDirectory('./')
 
 // es archivo md?
 const filesMd = (arrayLinks) => {
@@ -49,10 +48,14 @@ const filesMd = (arrayLinks) => {
   arrayLinks.forEach((element) => {
     if (path.extname(element) === '.md') {
       return fileIsMd.push(element);
+    } else if (path.extname(element) === ''){
+      throughDirectory(element)
     }
   });
+  // console.log(fileIsMd);
   return fileIsMd;
 };
+// filesMd(throughDirectory('./'));
 
 // traer links
 const extracLinks = (route) => {
@@ -72,13 +75,13 @@ const extracLinks = (route) => {
           const name = infoLinks.match(regExpressionNameLink).toString();
           arrayDataLinks.push({
             // file: path.resolve(elementMd),
-            href: href.split((/[\(\)]/))[1], 
+            href: href.split((/[\(\)]/))[1],
             text: name.split(/[\[\]]/)[1],
           });
         }
       });
     }
-  });  
+  });
   return arrayDataLinks;
 };
 // console.log(extracLinks('README.md'));
@@ -117,12 +120,10 @@ const getStatsLinks = (validatedLinks) => {
       counterFail++;
     }
   });
-  console.log(chalk.blue(`Total de links:`), chalk.blueBright(`${totalLinks}`));
-  console.log(chalk.green(`Links válidos:`), chalk.greenBright(`${counterOk}`));
-  console.log(chalk.red(`Links rotos:`), chalk.redBright(`${counterFail}`));
+  console.log(chalk.blue('Total de links:'), chalk.blueBright(`${totalLinks}`));
+  console.log(chalk.green('Links válidos:'), chalk.greenBright(`${counterOk}`));
+  console.log(chalk.red('Links rotos:'), chalk.redBright(`${counterFail}`));
 };
-
-
 
 const mainValidate = (path) => {
   const objetoLinks = extracLinks(path);
@@ -160,7 +161,7 @@ module.exports = {
   getStatsLinks,
   mainValidate,
   mainStats,
-  chalk
+  chalk,
   // ambas
 
 };
